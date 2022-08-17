@@ -1,0 +1,17 @@
+version: 2
+
+macros:
+  - name: get_columns_except_prefix
+    description: Utility function to retrieve all the columns of a target DBT model except the ones containing a specific substring in the column name.
+    docs:
+      show: true
+    arguments:
+      - name: in_target_table
+        type: string
+        description: The reference dbt model, provided as a string.
+      - name: in_except_col_prefix
+        type: string
+        description: The string which, if found in the column name, will lead to exclusion of the column from the output. Case-sensitive.
+      - name: in_table_prefix
+        type: string
+        description: An optional parameter requesting the prefix of output column names with a content, i.e. 'schema.'. Very useful when the output is used in a join (thus the same column appears in multiple entities) and it is necesarry to discern from which table the field should be taken.

@@ -1,0 +1,164 @@
+version: 2
+
+models:
+  - name: raw_weblogs
+    description: Web logs of customer interaction, broken down by attribute (bronze). The breakdown is performed using regular expressions.
+    columns:
+      # 'IP', 'USER_I', 'USER_A', 'TS', 'METHOD', 'PATH', 'PROTO', 'RESP_CODE', 'PAYLOAD_SIZE', 'REFERRER', 'USER_AGENT' + added fields
+      - name: ip
+        description: IP address from which the request reached the server (might be direct customer IP or the address of a VPN/proxy).
+      - name: user_i
+        description: The identity of the user determined by the ident. Reliability is not guaranteed.
+      - name: user_a
+        description: The identity of the user determined by HTTP authentication.
+      - name: ts
+        description: The timestamp of the request.
+      - name: method
+        description: The HTTP method of the request.
+      - name: path
+        description: The target endpoint of the request.
+      - name: proto
+        description: The HTTP protocol and version of the request.
+      - name: resp_code
+        description: The response provided by the server to the request, based on HTTP response codes.
+      - name: check_timestamp_format
+        description: Internal check (true if successful) indicating whether the timestamp field actually represents a timestamp string.
+      - name: check_last_field_populated
+        description: Internal check (true if successful) indicating whether the last field in the table is populated correctly. If not, this indicates that the regular expression failed or that one of the previous fields contained an invalid pattern.
+
+  - name: stg_weblogs
+    description: Web logs of customer interactions (silver).
+    columns:
+      - name: ip
+        description: IP address from which the request reached the server (might be direct customer IP or the address of a VPN/proxy).
+      - name: user_i
+        description: The identity of the user determined by the ident. Reliability is not guaranteed.
+      - name: user_a
+        # quote: true -- this surround the column by quotes and retain the case mentione here, in case capital-sensitiveness is an issue
+        description: The identity of the user determined by HTTP authentication.
+        tests: 
+          - not_null
+      - name: ts
+        description: The timestamp of the request.
+      - name: method
+        description: The HTTP method of the request.
+      - name: path
+        description: The target endpoint of the request.
+      - name: proto
+        description: The HTTP protocol and version of the request.
+      - name: resp_code
+        description: The response provided by the server to the request, based on HTTP response codes.
+      - name: country_code
+        description: The country code corresponding to the IP, if this is available in the ip-to-country internal cache when creating this model. Can be populated initially (if available) or refreshed later by a periodic job. 
+
+  - name: stg_orders
+    description: Customer orders (silver).
+    columns:
+      - name: id
+        description: Unique order ID (not sequenced).
+        tests:
+          - not_null
+          - unique
+      - name: transaction_timestamp
+        description: Timestamp when the order was placed and paid.
+        tests:
+          - not_null
+      - name: vendor_company
+        description: Vendor (distributor) company ID.
+        tests: 
+          - not_null
+          - relationships: #referential integrity check
+              to: ref('stg_companies')
+              field: id
+      - name: product
+        description: Product that was sold (one product per order).
+        tests:
+          - not_null
+          - relationships: #referential integrity check
+              to: ref('stg_products')
+              field: id
+      - name: customer
+        description: End-customer that bought a product.
+        tests:
+          - not_null
+      - name: qty
+        description: Quantity of products sold.
+        tests:
+          - not_null
+      - name: total_amount
+        description: Total sales proceeds for the order.
+        tests:
+          - not_null
+      - name: last_login_country_code
+        description: The ISO code of the country from which the IP of the last user interaction before the order placement was recorded. Assumed to represent 'the country of the order'.
+        tests:
+          - not_null
+      - name: last_login_ts
+        description: The timestamp at which the last user interaction before the order placement was recorded.
+        tests:
+          - not_null
+
+  - name: stg_products
+    description: Products available for sale (silver).
+    columns:
+      - name: id
+        description: Product unique identifier.
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: Product name.
+        tests:
+          - not_null
+
+  - name: stg_companies
+    description: Companies that are registered on the platform (silver).
+    columns:
+      - name: id
+        description: A unique identifier for the company.
+        tests:
+          - unique
+          - not_null
+      - name: cuit
+        description: The CUIT registration number of the company.
+        tests:
+          - unique #cannot have two companies with the same CUIT code
+          - not_null
+      - name: name
+        description: The name of the company.
+        tests:
+          - not_null
+  
+  - name: stg_catalogs
+    description: Product catalogs (silver).
+    columns:
+      - name: vendor_company
+        description: The company code of the vendor. The vendor is the company doing the sale to an end-customer.
+        tests:
+          - relationships: #referential integrity check
+              to: ref('stg_companies')
+              field: id
+      - name: product
+        description: Product ID.
+        tests:
+          - relationships: #referential integrity check
+              to: ref('stg_products')
+              field: id
+      - name: supplier_company
+        description: The company that the vendor purchased the product from. A supplier company is only selling to other companies, not directly to end-customers.
+        tests:
+          - relationships: #referential integrity check
+              to: ref('stg_companies')
+              field: id
+      - name: supplier_price
+        description: The transaction price at which the vendor company purchased the product from the supplier company.
+        tests:
+          - not_null
+      - name: retail_price
+        description: The transaction price at which the vendor company sold to the end-customer.
+        tests:
+          - not_null
+      - name: valid_from
+        description: The validity start date of a specific catalog item. <!> Currently not used!
+      - name: valid_to
+        description: The validity end date of a specific catalog item. <!> Currently not used!
