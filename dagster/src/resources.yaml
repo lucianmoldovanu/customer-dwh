@@ -2,14 +2,14 @@ resources:
   snowflake:
     config:
       account:
-        env: SNOWSQL_ACCT
+        env: SNOWFLAKE_HOST
       user:
-        env: SNOWSQL_USER
+        env: SNOWFLAKE_USER
       password:
-        env: SNOWSQL_PWD
+        env: SNOWFLAKE_PASSWORD
       database: CUSTOMER_DWH
       schema: B2B
       warehouse: COMPUTE_WH
   dbt:
     config:
-      project_dir: PIPELINE/ops/dbt
+      project_dir: DBT

@@ -1,0 +1,4 @@
+dagit==1.0.4
+dagster==1.0.4
+dagster-snowflake==0.16.4
+dagster-dbt==0.16.4

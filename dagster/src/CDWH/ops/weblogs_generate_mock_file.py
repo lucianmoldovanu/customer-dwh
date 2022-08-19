@@ -39,7 +39,7 @@ def generate_weblog_file(mockdata: Dict) -> None:
         ])
     ), axis = 1)
 
-    np.savetxt(r'PIPELINE/wlogs001.txt', df['log'], fmt = '%s')
+    np.savetxt(r'CDWH/wlogs001.txt', df['log'], fmt = '%s')
 
 # test support
 if __name__ == "__main__":

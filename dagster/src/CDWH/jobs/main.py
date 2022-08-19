@@ -2,10 +2,10 @@ from dagster import job
 from dagster_snowflake import snowflake_resource
 from dagster_dbt import dbt_cli_resource
 
-import PIPELINE.ops.main as ops
-from PIPELINE.ops.refresh_mock_data import refresh_mock
-from PIPELINE.ops.weblogs_generate_mock_file import generate_weblog_file
-from PIPELINE.ops.weblogs_transfer import transfer_weblogs
+import CDWH.ops.main as ops
+from CDWH.ops.refresh_mock_data import refresh_mock
+from CDWH.ops.weblogs_generate_mock_file import generate_weblog_file
+from CDWH.ops.weblogs_transfer import transfer_weblogs
 
 @job(resource_defs={'snowflake': snowflake_resource, 'dbt': dbt_cli_resource})
 def build_datamodel_populate_mock():

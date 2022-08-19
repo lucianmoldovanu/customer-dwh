@@ -3,7 +3,7 @@ from dagster import op
 
 @op
 def transfer_weblogs(context, dummy1, dummy2) -> None:
-    file_path = 'file://' + os.getcwd() + '/PIPELINE/wlogs001.txt @CUSTOMER_DWH.B2B.%wlogs'
+    file_path = 'file://' + os.getcwd() + '/CDWH/wlogs001.txt @CUSTOMER_DWH.B2B.%wlogs'
     res = subprocess.run([
         "snowsql",
         '-c',

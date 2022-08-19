@@ -5,7 +5,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from dagster import Dict, op
 
-from PIPELINE.utils import random_date
+from CDWH.utils import random_date
 
 ### constants for mock data generation
 N_COMPANIES = 100
@@ -21,9 +21,9 @@ VENDOR_PROFIT_MARGIN_PERCENT_MAX = 1
 def refresh_mock(a) -> Dict:
     engine = create_engine(
         'snowflake://{user}:{password}@{account_identifier}/CUSTOMER_DWH/B2B'.format(
-            user=os.environ['SNOWSQL_USER'],
-            password=os.environ['SNOWSQL_PWD'],
-            account_identifier=os.environ['SNOWSQL_ACCT']
+            user=os.environ['SNOWFLAKE_USER'],
+            password=os.environ['SNOWFLAKE_PASS'],
+            account_identifier=os.environ['SNOWFLAKE_HOST']
         )
     )
 

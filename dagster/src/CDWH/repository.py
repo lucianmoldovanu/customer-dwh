@@ -1,11 +1,11 @@
 from dagster import repository
 
-from PIPELINE.jobs.main import build_datamodel_populate_mock
-from PIPELINE.jobs.test import test_dbt
-from PIPELINE.jobs.ip_to_countries import refresh_ip_to_countries
+from CDWH.jobs.main import build_datamodel_populate_mock
+from CDWH.jobs.test import test_dbt
+from CDWH.jobs.ip_to_countries import refresh_ip_to_countries
 
 @repository
-def PIEPLINE():
+def CDWH():
     """
     The repository definition for this Dagster repository.
 
