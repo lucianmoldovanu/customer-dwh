@@ -6,10 +6,10 @@ resources:
       user:
         env: SNOWFLAKE_USER
       password:
-        env: SNOWFLAKE_PASSWORD
-      database: CUSTOMER_DWH
-      schema: B2B
-      warehouse: COMPUTE_WH
+        env: SNOWFLAKE_PASS
+      database: CDWH
+      schema: CORE
+      warehouse: CDWH_WH
   dbt:
     config:
       project_dir: DBT

@@ -6,7 +6,7 @@ import numpy as np
 from dagster import op, Dict
 
 @op
-def generate_weblog_file(mockdata: Dict) -> None:
+def generate_weblog_file(mockdata: Dict) -> str:
     acceptable_ip_prefixes = [i for i in range(1, 10)] + [i for i in range(11, 100)] + [i for i in range(101, 127)] + [i for i in range(128, 169)] + [i for i in range(173, 192)] + [i for i in range(199, 203)] + [i for i in range(204, 224)]
 
     customer_ids = [c[0] for c in mockdata['customers']]
@@ -40,6 +40,7 @@ def generate_weblog_file(mockdata: Dict) -> None:
     ), axis = 1)
 
     np.savetxt(r'CDWH/wlogs001.txt', df['log'], fmt = '%s')
+    return r'CDWH/wlogs001.txt'
 
 # test support
 if __name__ == "__main__":

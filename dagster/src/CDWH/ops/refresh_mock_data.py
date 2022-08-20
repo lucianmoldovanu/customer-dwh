@@ -17,15 +17,23 @@ SUPPLIER_PRODUCT_PRICE_RANDOM_MAX = 1500
 VENDOR_PROFIT_MARGIN_PERCENT_MIN = 0.2
 VENDOR_PROFIT_MARGIN_PERCENT_MAX = 1
 
+# arguments
+SNOWFLAKE_DB = 'CDWH'
+SNOWFLAKE_SCHEMA = 'CORE'
+SNOWFLAKE_WAREHOUSE = 'CDWH_WH'
+
 @op
 def refresh_mock(a) -> Dict:
-    engine = create_engine(
-        'snowflake://{user}:{password}@{account_identifier}/CUSTOMER_DWH/B2B'.format(
+    connString = 'snowflake://{user}:{password}@{account_identifier}/{db}/{schema}?warehouse={warehouse}'.format(
             user=os.environ['SNOWFLAKE_USER'],
             password=os.environ['SNOWFLAKE_PASS'],
-            account_identifier=os.environ['SNOWFLAKE_HOST']
+            account_identifier=os.environ['SNOWFLAKE_HOST'],
+            db=SNOWFLAKE_DB,
+            schema=SNOWFLAKE_SCHEMA,
+            warehouse=SNOWFLAKE_WAREHOUSE
         )
-    )
+
+    engine = create_engine(connString)
 
     connection = engine.connect()
 

@@ -29,7 +29,7 @@ Implemented using Dagster (pipeline orchestration), Snowflake (cloud DWH persist
 ERD diagram is created by reverse engineering the DB schema.
 
 To recreate:
-- export the latest definition from Snowflake (`select get_ddl('schema','"CUSTOMER_DWH"."B2B"', true)`)
+- export the latest definition from Snowflake (`select get_ddl('schema','"CDWH"."CORE"', true)`)
 - import the definition in [SQLDBM](https://app.sqldbm.com/Snowflake/BringDb/) or similar tool
 
 <img src="docs/data_model.png" alt="ERD snapshot" width="600"/>
