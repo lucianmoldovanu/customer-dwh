@@ -26,13 +26,13 @@ RUN snowsql -v
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-RUN mkdir /dbt
-
 ENV SNOWFLAKE_HOST $ARG_SNOWFLAKE_HOST
 ENV SNOWFLAKE_USER $ARG_SNOWFLAKE_USER
 ENV SNOWFLAKE_PASS $ARG_SNOWFLAKE_PASS
 
 # RUN ECHO "luc\n $ARG_SNOWFLAKE_HOST ${SNOFLAKE_HOST} ${ARG_SNOWFLAKE_HOST}"
+RUN mkdir /root/.dbt
+
 RUN echo "\
 DBT_PROFILE_CDWH_SNOWFLAKE:\n\
   outputs:\n\
@@ -40,14 +40,14 @@ DBT_PROFILE_CDWH_SNOWFLAKE:\n\
       type: snowflake\n\
       threads: 1\n\
       account: $ARG_SNOWFLAKE_HOST\n\
-      database: DB_CDWH\n\
-      schema: SCH_CDWH\n\
-      warehouse: WH_CDWH\n\
+      database: CDWH\n\
+      schema: CORE\n\
+      warehouse: CDWH_WH\n\
       user: $ARG_SNOWFLAKE_USER\n\
       password: $ARG_SNOWFLAKE_PASS\n\
       role: ACCOUNTADMIN\n\
   target: dev\
-" >> /dbt/profiles.yml
+" >> /root/.dbt/profiles.yml
 
 # Copy source code
 # COPY ./dagster.yaml .

@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: commercial
     description: Commercial transactional data.
-    schema: B2B
+    schema: CORE
     # loaded_at_field: _etl_loaded_at
     # freshness: # default freshness
     #   warn_after: {count: 12, period: hour}

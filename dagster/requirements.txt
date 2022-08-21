@@ -3,3 +3,4 @@ dagster==1.0.4
 dagster-snowflake==0.16.4
 dagster-dbt==0.16.4
 snowflake-sqlalchemy==1.3.4
+dbt-snowflake==1.2.0
