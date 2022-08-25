@@ -1,7 +1,11 @@
 # Customer DWH sample project
-Implemented using Dagster (pipeline orchestration), Snowflake (cloud DWH persistency), DBT (data transformations) and Python (generation of mock data; w/ adapters for Snowflake, SQLAlchemy etc).
+Data engineering demo project implemented using Dagster (pipeline orchestration), Snowflake (cloud DWH persistency), DBT (data transformations), Python (generation of mock data; w/ adapters for Snowflake, SQLAlchemy etc) and Dash (BI).
 
 <img src="docs/process.drawio.png" alt="High-level architecture" width="600"/>
+
+This is how the dashboard looks like:
+
+<img src="docs/demo-dashboard.png" alt="Demo dashboard in Dash" width="600"/>
 
 <br>
 

@@ -13,15 +13,26 @@ services:
     ports:
       - 3000:3000
     container_name: ddagit
-  dagster-daemon:
+  # dagster-daemon:
+  #   build: 
+  #     context: dagster/.
+  #     args:
+  #       ARG_SNOWFLAKE_HOST: ${SNOWFLAKE_HOST} #taken (when building image) from host ENV and passed as build-argument to image
+  #       ARG_SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+  #       ARG_SNOWFLAKE_PASS: ${SNOWFLAKE_PASS}
+  #   command: "dagster-daemon run"
+  #   container_name: ddaemon
+  dash:
     build: 
-      context: dagster/.
+      context: dash/.
       args:
         ARG_SNOWFLAKE_HOST: ${SNOWFLAKE_HOST} #taken (when building image) from host ENV and passed as build-argument to image
         ARG_SNOWFLAKE_USER: ${SNOWFLAKE_USER}
         ARG_SNOWFLAKE_PASS: ${SNOWFLAKE_PASS}
-    command: "dagster-daemon run"
-    container_name: ddaemon
+    command: "python app.py"
+    ports:
+      - 80:8080
+    container_name: dash
   # dagster-postgres:
   #   image: postgres:13.3
   #   ports:

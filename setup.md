@@ -7,3 +7,5 @@
 
 export SNOWFLAKE_HOST=fo97060.europe-west4.gcp SNOWFLAKE_USER=techexplorer1 SNOWFLAKE_PASS=????
 docker-compose up --build --force-recreate
+
+docker-compose up --force-recreate --no-deps dask
