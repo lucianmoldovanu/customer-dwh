@@ -6,6 +6,11 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 import requests
 import json
 
+# arguments
+SNOWFLAKE_DB = 'CDWH'
+SNOWFLAKE_SCHEMA = 'CORE'
+SNOWFLAKE_WAREHOUSE = 'CDWH_WH'
+
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
@@ -18,13 +23,16 @@ class IpCountryCache(Base):
 
 @op
 def refresh_in_batches():
-    engine = create_engine(
-        'snowflake://{user}:{password}@{account_identifier}/CUSTOMER_DWH/B2B'.format(
-            user=os.environ['SNOWFLAKE_USER'],
-            password=os.environ['SNOWFLAKE_PASS'],
-            account_identifier=os.environ['SNOWFLAKE_HOST']
-        )
+    connString = 'snowflake://{user}:{password}@{account_identifier}/{db}/{schema}?warehouse={warehouse}'.format(
+        user=os.environ['SNOWFLAKE_USER'],
+        password=os.environ['SNOWFLAKE_PASS'],
+        account_identifier=os.environ['SNOWFLAKE_HOST'],
+        db=SNOWFLAKE_DB,
+        schema=SNOWFLAKE_SCHEMA,
+        warehouse=SNOWFLAKE_WAREHOUSE
     )
+
+    engine = create_engine(connString)
 
     connection = engine.connect()
     engine.execute("delete from ip_country_cache where timestampdiff('day', DATE_REFRESHED, current_timestamp) >= 5")

@@ -1,15 +1,18 @@
-resources:
-  snowflake:
-    config:
-      account:
-        env: SNOWFLAKE_HOST
-      user:
-        env: SNOWFLAKE_USER
-      password:
-        env: SNOWFLAKE_PASS
-      database: CDWH
-      schema: CORE
-      warehouse: CDWH_WH
-  dbt:
-    config:
-      project_dir: DBT
+# resource initializtion is moved to the logic blocks (mainly during job definition)
+# ..because this way it is not required anymore to manually load this file into Dagit UI
+# ..and I found no acceptable way to programatically start Daggit pointed to a specific resources file
+# resources:
+#   snowflake:
+#     config:
+#       account:
+#         env: SNOWFLAKE_HOST
+#       user:
+#         env: SNOWFLAKE_USER
+#       password:
+#         env: SNOWFLAKE_PASS
+#       database: CDWH
+#       schema: CORE
+#       warehouse: CDWH_WH
+#   dbt:
+#     config:
+#       project_dir: DBT

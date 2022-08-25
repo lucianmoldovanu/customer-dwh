@@ -1,3 +1,5 @@
+import os
+
 from dagster import job
 from dagster_snowflake import snowflake_resource
 from dagster_dbt import dbt_cli_resource
@@ -7,7 +9,25 @@ from CDWH.ops.refresh_mock_data import refresh_mock
 from CDWH.ops.weblogs_generate_mock_file import generate_weblog_file
 from CDWH.ops.weblogs_transfer import transfer_weblogs
 
-@job(resource_defs={'snowflake': snowflake_resource, 'dbt': dbt_cli_resource})
+# arguments
+SNOWFLAKE_DB = 'CDWH'
+SNOWFLAKE_SCHEMA = 'CORE'
+SNOWFLAKE_WAREHOUSE = 'CDWH_WH'
+
+my_snowflake_resource = snowflake_resource.configured({
+    "account": os.environ['SNOWFLAKE_HOST'],
+    "user": os.environ['SNOWFLAKE_USER'],
+    "password": os.environ['SNOWFLAKE_PASS'],
+    "database": SNOWFLAKE_DB,
+    "schema": SNOWFLAKE_SCHEMA,
+    "warehouse": SNOWFLAKE_WAREHOUSE
+})
+
+my_dbt_cli_resource = dbt_cli_resource.configured({
+    "project_dir": "DBT"
+})
+
+@job(resource_defs={'snowflake': my_snowflake_resource, 'dbt': my_dbt_cli_resource})
 def build_datamodel_populate_mock():
     a = ops.refresh_b2b_data_model()
     mockdata = refresh_mock(a)
